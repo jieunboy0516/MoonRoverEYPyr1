@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <!-- CSS only -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+    crossorigin="anonymous"
+  />
+  <!-- JavaScript Bundle with Popper -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"
+  ></script>
+
+  <head>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body class="">
+    <script>
+
+      var socket = io();
+
+      socket.on("field", function (data) {
+        console.log(data);
+        data = JSON.parse(data);
+        console.log(data.radio61k);
+
+        //$("#field").html(data);
+        if ($("#status").html() != "Connected to Rover at " + data.roverip)
+          $("#status").html("Connected to Rover at " + data.roverip);
+        $("#radio61k").html(
+          "frequency of demodulated 61k radio signal: " + data.radio61k + "Hz"
+        );
+        $("#magnetic").html(
+          "Magnetic signal: " + data.magnetic
+        );
+        $("#infrared").html(
+          "frequency of infrared signal: " + data.infrared + "Hz"
+        );
+        $("#material").html(data.material);
+        $("#chosen_material_confidence").html(
+          "confidence percentage of the result: " +
+            data.chosen_material_confidence * 100 +
+            "%"
+        );
+        $("#GaboriumConfidence").html(
+          "Gaborium Confidence: " + data.GaboriumConfidence * 100 + "%"
+        );
+        $("#LathwaiteConfidence").html(
+          "Lathwaite Confidence: " + data.LathwaiteConfidence * 100 + "%"
+        );
+        $("#AdamantineConfidence").html(
+          "Adamantine Confidence: " + data.AdamantineConfidence * 100 + "%"
+        );
+        $("#XirangConfidence").html(
+          "Xirang Confidence: " + data.XirangConfidence * 100 + "%"
+        );
+        $("#ThiotimolineConfidence").html(
+          "Thiotimoline Confidence: " + data.ThiotimolineConfidence * 100 + "%"
+        );
+        $("#NetheriteConfidence").html(
+          "Netherite Confidence: " + data.NetheriteConfidence * 100 + "%"
+        );
+
+        $("#GaboriumConfidence").removeClass("bg-success");
+        $("#LathwaiteConfidence").removeClass("bg-success");
+        $("#AdamantineConfidence").removeClass("bg-success");
+        $("#XirangConfidence").removeClass("bg-success");
+        $("#ThiotimolineConfidence").removeClass("bg-success");
+        $("#NetheriteConfidence").removeClass("bg-success");
+
+        //hide chosen_material_confidence
+        $("#chosen_material_confidence").addClass("d-none");
+        if (data.chosen_material_confidence != null)
+          $("#chosen_material_confidence").removeClass("d-none");
+
+        //confidence percentages
+        var correspondingID = {
+          gaborium: "#GaboriumConfidence",
+          lathwaite: "#LathwaiteConfidence",
+          adamantine: "#AdamantineConfidence",
+          xirang: "#XirangConfidence",
+          thiotimoline: "#ThiotimolineConfidence",
+          netherite: "#NetheriteConfidence",
+        };
+        $(correspondingID[data.material]).addClass("bg-success");
+
+        //socket.emit('message', "testess");
+      });
+
+	  var myips = "none"
+	  socket.on("myip", function(data){
+		myips = data;
+	  })
+	  function showip(){
+		prompt("Copy to clipboard", myips);
+	  }
+
+    var roverip;
+    socket.on("roverip", function(data){
+		  roverip = data;
+      if ($("#status").html() != "Connected to Rover at " + roverip)
+          $("#status").html("Connected to Rover at " + roverip);
+	  })
+
+      //socket.emit('message', "testess");
+    </script>
+
+    <div class="p-2 mb-0 bg-primary text-white text-center">
+      <h1 class="mb-3">Moon Rover Group ZDB</h1>
+      <h4 class="mb-3" id="status">Waiting For Connection ...</h4>
+	    <button type="button" class="btn btn-outline-warning" onclick="showip()">get my IP</button>
+    </div>
+
+    <div class="d-flex flex-column bg-secondary text-white">
+      <h5 class="text-center p-2" id="radio61k">radio61k:</h5>
+      <h5 class="text-center p-2" id="magnetic">magnetic:</h5>
+      <h5 class="text-center p-2" id="infrared">infrared:</h5>
+    </div>
+
+ 
+    <div class="d-flex flex-column bg-warning text-dark">
+      <h4 class="text-center p-2">
+        Identified material:
+        <h2 class="display-3 text-center p-2">
+          <strong id="material"></strong>
+        </h2>
+      </h4>
+      <h4 class="text-center p-2" id="chosen_material_confidence">
+        chosen material confidence:
+      </h4>
+    </div>
+
+
+    <div class="d-flex flex-column bg-danger text-white">
+      <p class="text-center p-2" id="GaboriumConfidence">GaboriumConfidence:</p>
+      <p class="text-center p-2" id="LathwaiteConfidence">
+        LathwaiteConfidence:
+      </p>
+      <p class="text-center p-2" id="AdamantineConfidence">
+        AdamantineConfidence:
+      </p>
+      <p class="text-center p-2" id="XirangConfidence">XirangConfidence:</p>
+      <p class="text-center p-2" id="ThiotimolineConfidence">
+        ThiotimolineConfidence:
+      </p>
+      <p class="text-center p-2" id="NetheriteConfidence">
+        NetheriteConfidence:
+      </p>
+    </div>
+  </body>
+</html>

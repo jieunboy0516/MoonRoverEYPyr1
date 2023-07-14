@@ -1,0 +1,73 @@
+ControlInterface:
+
+<ControlInterface>:
+    orientation: "vertical"
+    BoxLayout:
+        orientation: "horizontal"
+        BoxLayout:
+            BoxLayout:
+                anchor_y: self.parent.y
+                orientation: "vertical"
+                TextInput:
+                    id: addressinput
+                    text: "127.0.0.1"  # set to loopback address by default
+                    multiline: False
+                    on_text: root.update_address()
+                TextInput:
+                    id: portinput
+                    text: "2390"  # default port
+                    multiline: False
+                    on_text: root.update_address()
+
+            ToggleButton:
+                text: "Sensor Data"
+                on_press: root.toggle_data()
+                background_color: 0.7, 0, 1, 1
+        Button:
+            on_press: root.toggle_sweep()
+            on_release: root.toggle_sweep()
+            text: "SWEEP"
+            size_hint: 0.2, 1
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint: 1, 5
+        BoxLayout:
+            orientation: "vertical"
+            Button:
+                on_press: root.move_forward()
+                on_release: root.forward_release()
+                background_color: 0, 0.6, 1, 1
+                Image:
+                    source: "arrowup.png"
+                    size: 100, 100
+                    center_x: self.parent.x + (self.parent.width)/2
+                    center_y: self.parent.y + (self.parent.height)/2
+            Button:
+                on_press: root.move_backward()
+                on_release: root.backward_release()
+                background_color: 0, 0.6, 1, 1
+                Image:
+                    source: "arrowdown.png"
+                    size: 100, 100
+                    center_x: self.parent.x + (self.parent.width)/2
+                    center_y: self.parent.y + (self.parent.height)/2
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                on_press: root.move_left()
+                on_release: root.left_release()
+                background_color: 0, 0.6, 1, 1
+                Image:
+                    source: "arrowleft.png"
+                    size: 100, 100
+                    center_x: self.parent.x + (self.parent.width)/2
+                    center_y: self.parent.y + (self.parent.height)/2
+            Button:
+                on_press: root.move_right()
+                on_release: root.right_release()
+                background_color: 0, 0.6, 1, 1
+                Image:
+                    source: "arrowright.png"
+                    size: 100, 100
+                    center_x: self.parent.x + (self.parent.width)/2
+                    center_y: self.parent.y + (self.parent.height)/2
